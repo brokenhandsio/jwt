@@ -74,7 +74,7 @@ extension Application.JWT {
         public let _jwt: Application.JWT
 
         public func signers(on request: Request) -> EventLoopFuture<JWTSigners> {
-            self.jwks.get(on: request).flatMapThrowing {
+            self.jwks.get(using: request.client, on: request.eventLoop, context: request).flatMapThrowing {
                 let signers = JWTSigners()
                 try signers.use(jwks: $0)
                 return signers
